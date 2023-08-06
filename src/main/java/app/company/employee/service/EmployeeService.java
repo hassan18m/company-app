@@ -68,7 +68,7 @@ public class EmployeeService {
     public EmployeeResponse updateEmail(String employeeId, String newEmail) {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> {
-                    logger.info("Employee with id: {} not found in DB",employeeId);
+                    logger.info("Employee with id: {} not found in DB", employeeId);
                     return new NotFoundException("There is no employee with ID: " + employeeId);
                 });
 

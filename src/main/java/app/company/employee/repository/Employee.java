@@ -1,12 +1,15 @@
 package app.company.employee.repository;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
+import app.company.company.repository.Company;
+import jakarta.persistence.*;
 import com.google.gson.Gson;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "employee")
 public class Employee {
@@ -19,6 +22,17 @@ public class Employee {
     private String phoneNumber;
     private String occupation;
     private LocalDate startDate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id")
+    private Company company;
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
 
     public String getWorkEmail() {
         return workEmail;
@@ -77,7 +91,6 @@ public class Employee {
     }
 
     @Override
-    public String toString() {
-        return gson.toJson(this);
+    public String toString() {return gson.toJson(this);
     }
 }

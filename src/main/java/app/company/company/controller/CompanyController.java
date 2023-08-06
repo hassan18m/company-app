@@ -1,11 +1,30 @@
 package app.company.company.controller;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import app.company.company.controller.model.CompanyRequest;
+import app.company.company.controller.model.CompanyResponse;
+import app.company.company.service.CompanyService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/company")
 public class CompanyController {
+    private static final Logger logger = LoggerFactory.getLogger(CompanyController.class);
+    private final CompanyService companyService;
+
+    @Autowired
+    public CompanyController(CompanyService companyService) {
+        this.companyService = companyService;
+    }
+
+    @PostMapping
+    public ResponseEntity<CompanyResponse> insertCompany(@RequestBody CompanyRequest companyRequest) {
+        logger.info("Received new company post request with data: {}", companyRequest);
+        CompanyResponse companyResponse = companyService.saveCompany(companyRequest);
+        return ResponseEntity.ok(companyResponse);
+    }
+
 }
