@@ -12,22 +12,21 @@ import java.util.List;
 public class Company {
     private static final Gson gson = new Gson();
     @Id
-    private String id;
     private String name;
     @Enumerated(EnumType.STRING)
     @Column
     private Field field;
-
+    private int requiredExperience;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Employee> employeeList = new ArrayList<>();
 
-    public String getId() {
-        return id;
+    public int getRequiredExperience() {
+        return requiredExperience;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setRequiredExperience(int requiredExperience) {
+        this.requiredExperience = requiredExperience;
     }
 
     public String getName() {

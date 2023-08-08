@@ -1,11 +1,11 @@
 package app.company.company.controller.model;
 
 public class CompanyResponse extends CompanyRequest {
-    private String id;
+    private String name;
 
-    public CompanyResponse(String id, String name, Field field) {
-        super(name, field);
-        this.id = id;
+    public CompanyResponse(String name, Field field, int requiredExperience) {
+        super(name, field, requiredExperience);
+        this.name = name;
     }
 
     public CompanyResponse() {

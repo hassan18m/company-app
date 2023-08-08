@@ -1,5 +1,8 @@
 package app.company.employee.service;
 
+
+import app.company.company.repository.Company;
+import app.company.company.repository.CompanyRepository;
 import app.company.employee.controller.exceptions.NotFoundException;
 import app.company.employee.controller.model.EmployeeRequest;
 import app.company.employee.controller.model.EmployeeResponse;
@@ -11,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,10 +22,12 @@ import java.util.UUID;
 public class EmployeeService {
     private static final Logger logger = LoggerFactory.getLogger(EmployeeService.class);
     private final EmployeeRepository employeeRepository;
+    private final CompanyRepository companyRepository;
 
     @Autowired
-    public EmployeeService(EmployeeRepository employeeRepository) {
+    public EmployeeService(EmployeeRepository employeeRepository, CompanyRepository companyRepository) {
         this.employeeRepository = employeeRepository;
+        this.companyRepository = companyRepository;
     }
 
     public EmployeeResponse saveEmployee(EmployeeRequest employeeRequest) {
@@ -34,7 +40,9 @@ public class EmployeeService {
         }
 
         Employee employee = requestToEntity(employeeRequest);
+
         employeeRepository.save(employee);
+        assignEmployeeToCompany(employee);
         logger.info("Persisted new employee with data: {}", employee);
         return entityToResponse(employee);
     }
@@ -78,6 +86,16 @@ public class EmployeeService {
         return entityToResponse(employee);
     }
 
+    private void assignEmployeeToCompany(Employee employee) {
+        List<Company> matchingCompanies = companyRepository.findByRequiredExperience(employee.getExperience());
+
+        if (!matchingCompanies.isEmpty()) {
+            Company selectedCompany = matchingCompanies.get(0); // You can implement more complex selection logic here
+            selectedCompany.addEmployee(employee);
+            companyRepository.save(selectedCompany);
+        }
+    }
+
     private static EmployeeResponse entityToResponse(Employee employee) {
         return new EmployeeResponse(
                 employee.getId(),
@@ -85,7 +103,8 @@ public class EmployeeService {
                 employee.getLastName(),
                 employee.getWorkEmail(),
                 employee.getPhoneNumber(),
-                employee.getOccupation()
+                employee.getOccupation(),
+                employee.getExperience()
         );
     }
 
@@ -97,6 +116,7 @@ public class EmployeeService {
         employee.setWorkEmail(employeeRequest.getWorkEmail());
         employee.setPhoneNumber(employeeRequest.getPhoneNumber());
         employee.setOccupation(employeeRequest.getOccupation());
+        employee.setExperience(employeeRequest.getExperience());
         employee.setStartDate(RandomDate.getRandomDate());
         return employee;
     }

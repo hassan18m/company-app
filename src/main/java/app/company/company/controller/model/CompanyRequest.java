@@ -4,23 +4,23 @@ import com.google.gson.Gson;
 
 public class CompanyRequest {
     private static final Gson gson = new Gson();
-    private String name;
     private Field field;
+    private int requiredExperience;
 
-    public CompanyRequest(String name, Field field) {
-        this.name = name;
+    public CompanyRequest(Field field,int requiredExperience) {
         this.field = field;
+        this.requiredExperience=requiredExperience;
     }
 
     public CompanyRequest() {
     }
 
-    public String getName() {
-        return name;
+    public int getRequiredExperience() {
+        return requiredExperience;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRequiredExperience(int requiredExperience) {
+        this.requiredExperience = requiredExperience;
     }
 
     public Field getField() {

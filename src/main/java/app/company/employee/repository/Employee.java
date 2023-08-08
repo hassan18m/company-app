@@ -1,6 +1,7 @@
 package app.company.employee.repository;
 
 import app.company.company.repository.Company;
+import app.company.company.repository.Occupation;
 import jakarta.persistence.*;
 import com.google.gson.Gson;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,11 +21,22 @@ public class Employee {
     private String lastName;
     private String workEmail;
     private String phoneNumber;
-    private String occupation;
+    @Enumerated(EnumType.STRING)
+    @Column
+    private Occupation occupation;
     private LocalDate startDate;
+    private int experience;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     private Company company;
+
+    public int getExperience() {
+        return experience;
+    }
+
+    public void setExperience(int experience) {
+        this.experience = experience;
+    }
 
     public Company getCompany() {
         return company;
@@ -74,11 +86,11 @@ public class Employee {
         this.lastName = lastName;
     }
 
-    public String getOccupation() {
+    public Occupation getOccupation() {
         return occupation;
     }
 
-    public void setOccupation(String occupation) {
+    public void setOccupation(Occupation occupation) {
         this.occupation = occupation;
     }
 

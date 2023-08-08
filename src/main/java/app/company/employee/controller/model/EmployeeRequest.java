@@ -1,5 +1,6 @@
 package app.company.employee.controller.model;
 
+import app.company.company.repository.Occupation;
 import com.google.gson.Gson;
 
 public class EmployeeRequest {
@@ -9,17 +10,27 @@ public class EmployeeRequest {
     private String lastName;
     private String workEmail;
     private String phoneNumber;
-    private String occupation;
+    private Occupation occupation;
+    private int experience;
 
     public EmployeeRequest() {
     }
 
-    public EmployeeRequest(String firstName, String lastName, String workEmail, String phoneNumber, String occupation) {
+    public EmployeeRequest(String firstName, String lastName, String workEmail, String phoneNumber, Occupation occupation, int experience) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.workEmail = workEmail;
         this.phoneNumber = phoneNumber;
         this.occupation = occupation;
+        this.experience = experience;
+    }
+
+    public int getExperience() {
+        return experience;
+    }
+
+    public void setExperience(int experience) {
+        this.experience = experience;
     }
 
     public String getFirstName() {
@@ -54,11 +65,11 @@ public class EmployeeRequest {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getOccupation() {
+    public Occupation getOccupation() {
         return occupation;
     }
 
-    public void setOccupation(String occupation) {
+    public void setOccupation(Occupation occupation) {
         this.occupation = occupation;
     }
 

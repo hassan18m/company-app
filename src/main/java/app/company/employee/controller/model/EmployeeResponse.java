@@ -1,5 +1,7 @@
 package app.company.employee.controller.model;
 
+import app.company.company.repository.Occupation;
+
 public class EmployeeResponse extends EmployeeRequest {
     private String id;
 
@@ -10,8 +12,8 @@ public class EmployeeResponse extends EmployeeRequest {
         this.id = id;
     }
 
-    public EmployeeResponse(String id, String firstName, String lastName, String workEmail, String phoneNumber, String occupation) {
-        super(firstName, lastName, workEmail, phoneNumber, occupation);
+    public EmployeeResponse(String id, String firstName, String lastName, String workEmail, String phoneNumber, Occupation occupation,int experience) {
+        super(firstName, lastName, workEmail, phoneNumber, occupation, experience);
         this.id = id;
     }
 
