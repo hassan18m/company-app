@@ -46,6 +46,10 @@ public class CompanyService {
                 .orElseThrow(RuntimeException::new);
     }
 
+    public List<Company> findByRequiredExperience(int experience) {
+        return companyRepository.findByRequiredExperience(experience);
+    }
+
 
     private static CompanyResponse entityToResponse(Company company) {
         return new CompanyResponse(

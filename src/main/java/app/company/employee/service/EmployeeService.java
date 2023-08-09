@@ -89,14 +89,13 @@ public class EmployeeService {
     }
 
     private void assignEmployeeToCompany(Employee employee) {
-        CompanyListener companyListener = new CompanyListener();
         List<Company> matchingCompanies = companyRepository.findByRequiredExperience(employee.getExperience());
         int randomCompany = (int) (Math.random() * matchingCompanies.size());
         if (!matchingCompanies.isEmpty()) {
             Company selectedCompany = matchingCompanies.get(randomCompany);
             employee.setCompany(selectedCompany);
             selectedCompany.addEmployee(employee);
-            companyListener.onPrePersist(selectedCompany);
+            CompanyListener.onPrePersist(selectedCompany);
             companyRepository.save(selectedCompany);
         }
     }

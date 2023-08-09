@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/company")
 public class CompanyController {
@@ -45,6 +47,11 @@ public class CompanyController {
     public ResponseEntity<Company> getCompanyByField(@RequestParam("name") Field fieldName) {
         logger.info("Received company get request with field: {}", fieldName.name());
         return ResponseEntity.ok(companyService.findByField(fieldName));
+    }
+
+    @GetMapping("/experience")
+    public ResponseEntity<List<Company>> getCompaniesByRequiredExperience(@RequestParam("required") int experience) {
+        return ResponseEntity.ok(companyService.findByRequiredExperience(experience));
     }
 
 }

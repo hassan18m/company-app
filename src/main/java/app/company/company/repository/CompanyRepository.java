@@ -2,14 +2,16 @@ package app.company.company.repository;
 
 import app.company.company.controller.model.Field;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface CompanyRepository extends JpaRepository<Company, String> {
     Optional<Company> findByName(String name);
-
     Optional<List<Company>> findByField(Field fieldName);
 
-    List<Company> findByRequiredExperience(int experience);
+    @Query("SELECT c FROM company c WHERE c.requiredExperience <= :experience")
+    List<Company> findByRequiredExperience(@Param("experience") int experience);
 }

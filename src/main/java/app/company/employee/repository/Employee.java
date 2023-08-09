@@ -3,6 +3,7 @@ package app.company.employee.repository;
 import app.company.company.repository.Company;
 import app.company.company.repository.Occupation;
 import app.company.employee.controller.exceptions.NotFoundException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import com.google.gson.Gson;
 
@@ -24,6 +25,7 @@ public class Employee {
     private int experience;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_name")
+    @JsonIgnore
     private Company company;
     @Transient
     private String companyName;
