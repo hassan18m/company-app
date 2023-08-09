@@ -12,8 +12,8 @@ public class EmployeeResponse extends EmployeeRequest {
         this.id = id;
     }
 
-    public EmployeeResponse(String id, String firstName, String lastName, String workEmail, String phoneNumber, Occupation occupation,int experience) {
-        super(firstName, lastName, workEmail, phoneNumber, occupation, experience);
+    public EmployeeResponse(String id, String firstName, String lastName, String workEmail, String phoneNumber, Occupation occupation, int experience, String companyName) {
+        super(firstName, lastName, workEmail, phoneNumber, occupation, experience, companyName);
         this.id = id;
     }
 

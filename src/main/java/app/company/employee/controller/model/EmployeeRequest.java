@@ -12,17 +12,27 @@ public class EmployeeRequest {
     private String phoneNumber;
     private Occupation occupation;
     private int experience;
+    private String companyName;
 
     public EmployeeRequest() {
     }
 
-    public EmployeeRequest(String firstName, String lastName, String workEmail, String phoneNumber, Occupation occupation, int experience) {
+    public EmployeeRequest(String firstName, String lastName, String workEmail, String phoneNumber, Occupation occupation, int experience,String companyName) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.workEmail = workEmail;
         this.phoneNumber = phoneNumber;
         this.occupation = occupation;
         this.experience = experience;
+        this.companyName = companyName;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
     public int getExperience() {

@@ -4,15 +4,35 @@ import com.google.gson.Gson;
 
 public class CompanyRequest {
     private static final Gson gson = new Gson();
+    private String name;
     private Field field;
     private int requiredExperience;
+    private int noOfEmployees;
 
-    public CompanyRequest(Field field,int requiredExperience) {
+    public CompanyRequest(String name, Field field,int requiredExperience,int noOfEmployees) {
+        this.name = name;
         this.field = field;
         this.requiredExperience=requiredExperience;
+        this.noOfEmployees = noOfEmployees;
     }
 
     public CompanyRequest() {
+    }
+
+    public int getNoOfEmployees() {
+        return noOfEmployees;
+    }
+
+    public void setNoOfEmployees(int noOfEmployees) {
+        this.noOfEmployees = noOfEmployees;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getRequiredExperience() {

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "company")
+@EntityListeners(CompanyListener.class)
 public class Company {
     private static final Gson gson = new Gson();
     @Id
@@ -18,8 +19,19 @@ public class Company {
     private Field field;
     private int requiredExperience;
 
+    // This field is transient and not persisted in the database
+    private Integer noOfEmployees;
+
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Employee> employeeList = new ArrayList<>();
+
+    public List<Employee> getEmployeeList() {
+        return employeeList;
+    }
+
+    public void setEmployeeList(List<Employee> employeeList) {
+        this.employeeList = employeeList;
+    }
 
     public int getRequiredExperience() {
         return requiredExperience;
@@ -45,6 +57,15 @@ public class Company {
         this.field = field;
     }
 
+    // Getter and setter for noOfEmployees
+    public Integer getNoOfEmployees() {
+        return noOfEmployees;
+    }
+
+    public void setNoOfEmployees(Integer noOfEmployees) {
+        this.noOfEmployees = noOfEmployees;
+    }
+
     public void addEmployee(Employee employee) {
         employeeList.add(employee);
         employee.setCompany(this);
@@ -57,6 +78,12 @@ public class Company {
 
     @Override
     public String toString() {
-        return gson.toJson(this);
+        // Exclude employeeList from serialization
+        Company copy = new Company();
+        copy.setName(name);
+        copy.setField(field);
+        copy.setRequiredExperience(requiredExperience);
+        copy.setNoOfEmployees(getNoOfEmployees());
+        return gson.toJson(copy);
     }
 }

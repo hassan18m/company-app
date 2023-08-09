@@ -2,15 +2,11 @@ package app.company.employee.repository;
 
 import app.company.company.repository.Company;
 import app.company.company.repository.Occupation;
+import app.company.employee.controller.exceptions.NotFoundException;
 import jakarta.persistence.*;
 import com.google.gson.Gson;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity(name = "employee")
 public class Employee {
@@ -27,8 +23,20 @@ public class Employee {
     private LocalDate startDate;
     private int experience;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_id")
+    @JoinColumn(name = "company_name")
     private Company company;
+    @Transient
+    private String companyName;
+    public String getCompanyName() {
+        if (company != null) {
+            return company.getName();
+        }
+        throw new NotFoundException("Company not found");
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
 
     public int getExperience() {
         return experience;
@@ -103,6 +111,17 @@ public class Employee {
     }
 
     @Override
-    public String toString() {return gson.toJson(this);
+    public String toString() {
+        Employee copy = new Employee();
+        copy.setId(id);
+        copy.setFirstName(firstName);
+        copy.setLastName(lastName);
+        copy.setWorkEmail(workEmail);
+        copy.setPhoneNumber(phoneNumber);
+        copy.setOccupation(occupation);
+        copy.setExperience(experience);
+        copy.setStartDate(startDate);
+        copy.setCompanyName(getCompanyName());
+        return gson.toJson(copy);
     }
 }

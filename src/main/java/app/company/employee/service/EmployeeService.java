@@ -2,6 +2,7 @@ package app.company.employee.service;
 
 
 import app.company.company.repository.Company;
+import app.company.company.repository.CompanyListener;
 import app.company.company.repository.CompanyRepository;
 import app.company.employee.controller.exceptions.NotFoundException;
 import app.company.employee.controller.model.EmployeeRequest;
@@ -41,8 +42,9 @@ public class EmployeeService {
 
         Employee employee = requestToEntity(employeeRequest);
 
-        employeeRepository.save(employee);
         assignEmployeeToCompany(employee);
+        employeeRepository.save(employee);
+
         logger.info("Persisted new employee with data: {}", employee);
         return entityToResponse(employee);
     }
@@ -87,11 +89,14 @@ public class EmployeeService {
     }
 
     private void assignEmployeeToCompany(Employee employee) {
+        CompanyListener companyListener = new CompanyListener();
         List<Company> matchingCompanies = companyRepository.findByRequiredExperience(employee.getExperience());
-
+        int randomCompany = (int) (Math.random() * matchingCompanies.size());
         if (!matchingCompanies.isEmpty()) {
-            Company selectedCompany = matchingCompanies.get(0); // You can implement more complex selection logic here
+            Company selectedCompany = matchingCompanies.get(randomCompany);
+            employee.setCompany(selectedCompany);
             selectedCompany.addEmployee(employee);
+            companyListener.onPrePersist(selectedCompany);
             companyRepository.save(selectedCompany);
         }
     }
@@ -104,7 +109,8 @@ public class EmployeeService {
                 employee.getWorkEmail(),
                 employee.getPhoneNumber(),
                 employee.getOccupation(),
-                employee.getExperience()
+                employee.getExperience(),
+                employee.getCompanyName()
         );
     }
 
@@ -118,6 +124,7 @@ public class EmployeeService {
         employee.setOccupation(employeeRequest.getOccupation());
         employee.setExperience(employeeRequest.getExperience());
         employee.setStartDate(RandomDate.getRandomDate());
+        employee.setCompanyName(employeeRequest.getCompanyName());
         return employee;
     }
 }
