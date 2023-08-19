@@ -2,22 +2,26 @@ package app.company.employee.controller.model;
 
 import app.company.company.repository.Occupation;
 import com.google.gson.Gson;
+import jakarta.validation.constraints.*;
 
 public class EmployeeRequest {
     private static final Gson gson = new Gson();
 
     private String firstName;
     private String lastName;
+    @Email
     private String workEmail;
+    @Pattern(regexp = "^\\+40[1-9][0-9]{8}$")
     private String phoneNumber;
     private Occupation occupation;
+    @Min(0)
     private int experience;
     private String companyName;
 
     public EmployeeRequest() {
     }
 
-    public EmployeeRequest(String firstName, String lastName, String workEmail, String phoneNumber, Occupation occupation, int experience,String companyName) {
+    public EmployeeRequest(String firstName, String lastName, String workEmail, String phoneNumber, Occupation occupation, int experience, String companyName) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.workEmail = workEmail;

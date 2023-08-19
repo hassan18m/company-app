@@ -2,6 +2,7 @@ package app.company.employee.controller.model;
 
 public class ErrorResponse {
     public static final String CLIENT_ERROR_CODE = "001";
+    public static final String COMPANY_ERROR_CODE = "002";
     private String errorMessage;
     private String errorCode;
 

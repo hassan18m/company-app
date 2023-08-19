@@ -6,14 +6,18 @@ import app.company.employee.controller.model.EmployeeResponse;
 import app.company.employee.controller.model.ErrorResponse;
 import app.company.employee.repository.DuplicateDataException;
 import app.company.employee.service.EmployeeService;
+import app.company.employee.service.InvalidOccupationException;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Validated
 @RequestMapping("/api/employee")
 public class EmployeeController {
     private static final Logger logger = LoggerFactory.getLogger(EmployeeController.class);
@@ -25,7 +29,7 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<?> insertEmployee(@RequestBody EmployeeRequest employeeRequest) {
+    public ResponseEntity<?> insertEmployee(@RequestBody @Valid EmployeeRequest employeeRequest) {
         logger.info("Received new employee post request with data: {}", employeeRequest);
         try {
             return ResponseEntity.ok(employeeService.saveEmployee(employeeRequest));
@@ -34,6 +38,13 @@ public class EmployeeController {
             errorResponse.setErrorCode(ErrorResponse.CLIENT_ERROR_CODE);
             errorResponse.setErrorMessage("Duplicate data was found on the request");
             return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+        } catch (NotFoundException e) {
+            ErrorResponse errorResponse = new ErrorResponse();
+            errorResponse.setErrorCode(ErrorResponse.COMPANY_ERROR_CODE);
+            errorResponse.setErrorMessage("Company with requested requirements not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        } catch (InvalidOccupationException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

@@ -29,6 +29,7 @@ public class Employee {
     private Company company;
     @Transient
     private String companyName;
+
     public String getCompanyName() {
         if (company != null) {
             return company.getName();

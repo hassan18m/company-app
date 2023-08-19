@@ -5,6 +5,7 @@ import app.company.company.controller.model.CompanyResponse;
 import app.company.company.controller.model.Field;
 import app.company.company.repository.Company;
 import app.company.company.repository.CompanyRepository;
+import app.company.employee.controller.exceptions.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class CompanyService {
     }
 
     public Company findByField(Field fieldName) {
-        List<Company> companyList = companyRepository.findByField(fieldName).orElseThrow(RuntimeException::new);
+        List<Company> companyList = companyRepository.findByField(fieldName);
         return companyList.stream()
                 .findFirst()
                 .orElseThrow(RuntimeException::new);
@@ -48,6 +49,16 @@ public class CompanyService {
 
     public List<Company> findByRequiredExperience(int experience) {
         return companyRepository.findByRequiredExperience(experience);
+    }
+
+    public void deleteById(String id) {
+        companyRepository.findById(id).orElseThrow(() -> {
+            logger.info("No company with id: {} found", id);
+            return new NotFoundException("Company with id " + id + " not found in database.");
+        });
+
+        companyRepository.deleteById(id);
+        logger.info("Company with id: {} successfully removed.", id);
     }
 
 

@@ -5,9 +5,11 @@ import app.company.company.controller.model.CompanyResponse;
 import app.company.company.controller.model.Field;
 import app.company.company.repository.Company;
 import app.company.company.service.CompanyService;
+import app.company.employee.controller.exceptions.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,6 +54,17 @@ public class CompanyController {
     @GetMapping("/experience")
     public ResponseEntity<List<Company>> getCompaniesByRequiredExperience(@RequestParam("required") int experience) {
         return ResponseEntity.ok(companyService.findByRequiredExperience(experience));
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> removeCompanyById(@PathVariable("id") String id) {
+        logger.info("Received new company delete request with id: {}", id);
+        try {
+            companyService.deleteById(id);
+            return ResponseEntity.noContent().build();
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
 }
