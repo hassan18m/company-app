@@ -2,7 +2,10 @@ package app.company;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-@SpringBootApplication
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class CompanyApplication {
 
 	public static void main(String[] args) {
