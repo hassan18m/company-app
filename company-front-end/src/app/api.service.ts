@@ -17,4 +17,9 @@ export class ApiService {
     console.log('Employee data before POST request:', employeeData);
     return this.http.post(`${this.apiUrl}/employee`, employeeData);
   }
+
+  getCompanyById(id: string) {
+    return this.http.get(`${this.apiUrl}/company/${id}`);
+  }
+  
 }

@@ -1,0 +1,14 @@
+<h1>Find company by id</h1>
+<label for="company_id">Company Id:</label>
+<input type="text" id="company_id" [(ngModel)]="id"/>
+<button (click)="getCompany()">Find Company</button>
+<div *ngIf="company">
+    <h2>Company Details</h2>
+    <ol>
+        <li>Company Id/Name: {{company.name}}</li>
+        <li>Company Field: {{company.field}}</li>
+        <li>Company required experience: {{company.requiredExperience}}</li>
+        <li>Number of employees: {{company.noOfEmployees}}</li>
+    </ol>
+</div>
+<p *ngIf="error" style="color: red;">{{error}}</p>
