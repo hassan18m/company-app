@@ -10,8 +10,7 @@ import java.util.Optional;
 
 public interface CompanyRepository extends JpaRepository<Company, String> {
     Optional<Company> findByName(String name);
-
-    List<Company> findByField(Field fieldName);
+    List<Company> findByField(Field field);
 
     @Query("SELECT c FROM company c WHERE c.requiredExperience <= :experience")
     List<Company> findByRequiredExperience(@Param("experience") int experience);

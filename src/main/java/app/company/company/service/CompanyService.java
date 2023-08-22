@@ -6,12 +6,14 @@ import app.company.company.controller.model.Field;
 import app.company.company.repository.Company;
 import app.company.company.repository.CompanyRepository;
 import app.company.employee.controller.exceptions.NotFoundException;
+import app.company.employee.repository.DuplicateDataException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CompanyService {
@@ -24,6 +26,10 @@ public class CompanyService {
     }
 
     public CompanyResponse saveCompany(CompanyRequest companyRequest) {
+        if (companyRepository.existsById(companyRequest.getName())) {
+            throw new DuplicateDataException();
+        }
+
         Company company = requestToEntity(companyRequest);
         companyRepository.save(company);
         logger.info("Persisted new company with data: {}", company);
@@ -31,20 +37,26 @@ public class CompanyService {
     }
 
     public CompanyResponse findById(String id) {
-        Company company = companyRepository.findById(id).orElseThrow(RuntimeException::new);
+        Company company = companyRepository
+                .findById(id)
+                .orElseThrow(NotFoundException::new);
+
         return entityToResponse(company);
     }
 
     public CompanyResponse findByName(String name) {
-        Company company = companyRepository.findByName(name).orElseThrow(RuntimeException::new);
+        Company company = companyRepository
+                .findByName(name)
+                .orElseThrow(NotFoundException::new);
+
         return entityToResponse(company);
     }
 
-    public Company findByField(Field fieldName) {
-        List<Company> companyList = companyRepository.findByField(fieldName);
-        return companyList.stream()
-                .findFirst()
-                .orElseThrow(RuntimeException::new);
+    public List<CompanyResponse> findByField(Field fieldName) {
+        return companyRepository.findByField(fieldName)
+                .stream()
+                .map(CompanyService::entityToResponse)
+                .collect(Collectors.toList());
     }
 
     public List<Company> findByRequiredExperience(int experience) {

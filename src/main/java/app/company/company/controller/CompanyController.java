@@ -6,6 +6,8 @@ import app.company.company.controller.model.Field;
 import app.company.company.repository.Company;
 import app.company.company.service.CompanyService;
 import app.company.employee.controller.exceptions.NotFoundException;
+import app.company.employee.repository.DuplicateDataException;
+import app.company.global_exceptions.ErrorResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,27 +29,45 @@ public class CompanyController {
     }
 
     @PostMapping
-    public ResponseEntity<CompanyResponse> insertCompany(@RequestBody CompanyRequest companyRequest) {
+    public ResponseEntity<?> insertCompany(@RequestBody CompanyRequest companyRequest) {
         logger.info("Received new company post request with data: {}", companyRequest);
-        CompanyResponse companyResponse = companyService.saveCompany(companyRequest);
-        return ResponseEntity.ok(companyResponse);
+        try {
+            return ResponseEntity.ok(companyService.saveCompany(companyRequest));
+        } catch (DuplicateDataException e) {
+            ErrorResponse errorResponse = new ErrorResponse("Company already existent"
+                    , ErrorResponse.COMPANY_ERROR_CODE);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse.getErrorMessage());
+        }
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<CompanyResponse> getCompanyById(@PathVariable("id") String id) {
+    public ResponseEntity<?> getCompanyById(@PathVariable("id") String id) {
         logger.info("Received company get request with id: {}", id);
-        return ResponseEntity.ok(companyService.findById(id));
+        try {
+            return ResponseEntity.ok(companyService.findById(id));
+        } catch (NotFoundException e) {
+            ErrorResponse errorResponse = new ErrorResponse("Company not found"
+                    , ErrorResponse.COMPANY_ERROR_CODE);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse.getErrorMessage());
+        }
     }
 
     @GetMapping
-    public ResponseEntity<CompanyResponse> getCompanyByName(@RequestParam("name") String name) {
+    public ResponseEntity<?> getCompanyByName(@RequestParam("name") String name) {
         logger.info("Received company get request with name: {}", name);
-        return ResponseEntity.ok(companyService.findByName(name));
+        try {
+            return ResponseEntity.ok(companyService.findByName(name));
+        } catch (NotFoundException e) {
+            ErrorResponse errorResponse = new ErrorResponse("Company with requested name not found"
+                    , ErrorResponse.COMPANY_ERROR_CODE);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse.getErrorMessage());
+        }
     }
 
     @GetMapping("/field")
-    public ResponseEntity<Company> getCompanyByField(@RequestParam("name") Field fieldName) {
+    public ResponseEntity<List<CompanyResponse>> getCompanyByField(@RequestParam("name") Field fieldName) {
         logger.info("Received company get request with field: {}", fieldName.name());
+
         return ResponseEntity.ok(companyService.findByField(fieldName));
     }
 

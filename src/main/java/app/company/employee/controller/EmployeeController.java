@@ -3,7 +3,7 @@ package app.company.employee.controller;
 import app.company.employee.controller.exceptions.NotFoundException;
 import app.company.employee.controller.model.EmployeeRequest;
 import app.company.employee.controller.model.EmployeeResponse;
-import app.company.employee.controller.model.ErrorResponse;
+import app.company.global_exceptions.ErrorResponse;
 import app.company.employee.repository.DuplicateDataException;
 import app.company.employee.service.EmployeeService;
 import app.company.employee.service.InvalidOccupationException;
