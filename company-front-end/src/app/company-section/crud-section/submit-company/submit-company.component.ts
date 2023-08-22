@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ApiService } from 'src/app/api.service';
 
 @Component({
   selector: 'app-submit-company',
@@ -7,4 +8,20 @@ import { Component } from '@angular/core';
 })
 export class SubmitCompanyComponent {
 
+  company: any = { };
+  
+  constructor(private apiService: ApiService) { };
+
+  createCompany() {
+    this.apiService.createCompany(this.company).subscribe(
+    {
+      next: (response: any) => {
+        console.log('New company persisted:', response);
+      },
+      error: (error: any) => {
+        console.log('Error creating company: ', error);
+      }
+    }
+    );
+  }
 }

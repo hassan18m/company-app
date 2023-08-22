@@ -21,5 +21,9 @@ export class ApiService {
   getCompanyById(id: string) {
     return this.http.get(`${this.apiUrl}/company/${id}`);
   }
-  
+
+  createCompany(companyData: any) {
+    console.log('Company data before POST request:', companyData);
+    return this.http.post(`${this.apiUrl}/company`, companyData);
+  }  
 }

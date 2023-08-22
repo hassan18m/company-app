@@ -1,1 +1,12 @@
-<p>submit-company works!</p>
+<h1>Submit Company</h1>
+<div class="input_form">
+    <label for="companyName">Name:</label>
+    <input type="text" id="companyName" [(ngModel)]="company.name" />
+
+    <label for="field">Field:</label>
+    <input type="text" id="field" [(ngModel)]="company.field" />
+
+    <label for="requiredExperience">Required Experience:</label>
+    <input type="text" id="requiredExperience" [(ngModel)]="company.requiredExperience" />
+</div>
+<button (click)="createCompany()">Submit Company</button>
