@@ -5,5 +5,7 @@ public enum Field {
     SALES,
     COMMUNICATIONS,
     EDUCATION,
-    POLITICS
+    POLITICS,
+    MAINTENANCE,
+    ACCOUNTING
 }

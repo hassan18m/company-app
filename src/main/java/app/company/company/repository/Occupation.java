@@ -9,5 +9,8 @@ public enum Occupation {
     POLICE_OFFICER,
     FIREFIGHTER,
     MAYOR,
-    ELECTRICIAN
+    ELECTRICIAN,
+    ACCOUNTANT,
+    MECHANIC,
+    BANKER
 }
